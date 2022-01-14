@@ -1,0 +1,1156 @@
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\delete_test.java
+import java.awt.*;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): delete_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:36
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class delete_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        Function function = new Function();
+        int result = function.delete(13);
+        if (result == 0)
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.out.println("删除失败！");
+        }
+        else
+        {
+            System.out.println("删除成功");
+        }
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime);
+             final_runtime = final_runtime / 1000;
+             System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+         }
+        else
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime) / 10000;
+             final_runtime = final_runtime / 100000;
+             System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\findById_test.java
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): findById_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:27
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class findById_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        Function function = new Function();
+        Student student=function.findById(6);
+        System.out.println("学号："+student.getNo() + "\t\t" +"姓名："+ student.getName() +
+                "\t\t" + "性别："+student.getSex() + "\t\t" + "年龄："+student.getAge());
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime);
+             final_runtime = final_runtime / 1000;
+             System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+         }
+        else
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime) / 10000;
+             final_runtime = final_runtime / 100000;
+             System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\Function.java
+import java.awt.*;
+import java.sql.*;
+import java.util.ArrayList;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): Function
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 13:58
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class Function implements Function_interface
+{
+    /**
+     * 连接数据库
+     */
+    public static Connection getConnection() throws Exception
+    {
+        Connection connection = null;
+
+        Class.forName("com.mysql.cj.jdbc.Driver");  //新版
+        //旧版：com.mysql.jdbc.Driver
+        //Loading class `com.mysql.jdbc.Driver'. This is deprecated.
+        // The new driver class is `com.mysql.cj.jdbc.Driver'.
+        // The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/student", "root", "20010713");
+
+        return connection;
+    }
+
+    @Override
+    public ArrayList<Student> find()
+    {
+        ArrayList<Student> list = new ArrayList<>();
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            String sql = "select * from information";
+            //执行sql语句，返回结果集
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next())
+            {
+                Integer no = resultSet.getInt("no");
+                String name = resultSet.getString("name");
+                String sex = resultSet.getString("sex");
+                Integer age = resultSet.getInt("age");
+                Student student = new Student(no, name, sex, age);
+                list.add(student);
+            }
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (resultSet != null)
+            {
+                try
+                {
+                    resultSet.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Student findById(Integer no)
+    {
+        Student student = null;
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            String sql = "select * from information where no=" + no;
+            //执行sql语句，返回结果集
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next())
+            {
+                Integer no1 = resultSet.getInt("no");
+                String name = resultSet.getString("name");
+                String sex = resultSet.getString("sex");
+                Integer age = resultSet.getInt("age");
+                student = new Student(no1, name, sex, age);
+            }
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (resultSet != null)
+            {
+                try
+                {
+                    resultSet.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return student;
+    }
+
+    @Override
+    public int insert(Student student)
+    {
+        int result = 0;
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("insert into information values");
+            stringBuilder.append("('");
+            stringBuilder.append(student.getNo());
+            stringBuilder.append("','");
+            stringBuilder.append(student.getName());
+            stringBuilder.append("','");
+            stringBuilder.append(student.getSex());
+            stringBuilder.append("','");
+            stringBuilder.append(student.getAge());
+            stringBuilder.append("')");
+            String sql = stringBuilder.toString();
+            System.out.println(sql);
+            //执行sql语句，返回结果集
+            result = statement.executeUpdate(sql);
+
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int update(Student student)
+    {
+        int result = 0;
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("update  information set ");
+            stringBuilder.append("no='");
+            stringBuilder.append(student.getNo());
+            stringBuilder.append("',name='");
+            stringBuilder.append(student.getName());
+            stringBuilder.append("',sex='");
+            stringBuilder.append(student.getSex());
+            stringBuilder.append("',age='");
+            stringBuilder.append(student.getAge());
+            stringBuilder.append("' where no=");
+            stringBuilder.append(student.getNo());
+            String sql = stringBuilder.toString();
+            System.out.println(sql);
+            //执行sql语句，返回结果集
+            result = statement.executeUpdate(sql);
+
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int update(Student student, int old_no)
+    {
+        int result = 0;
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("update  information set ");
+            stringBuilder.append("no='");
+            stringBuilder.append(student.getNo());
+            stringBuilder.append("',name='");
+            stringBuilder.append(student.getName());
+            stringBuilder.append("',sex='");
+            stringBuilder.append(student.getSex());
+            stringBuilder.append("',age='");
+            stringBuilder.append(student.getAge());
+            stringBuilder.append("' where no=");
+            stringBuilder.append(old_no);
+            String sql = stringBuilder.toString();
+            System.out.println(sql);
+            //执行sql语句，返回结果集
+            result = statement.executeUpdate(sql);
+
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int delete(Integer no)
+    {
+        int result = 0;
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            String sql = "delete from information where no=" + no;
+            System.out.println(sql);
+            //执行sql语句，返回结果集
+            result = statement.executeUpdate(sql);
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public ArrayList<Student> sort(String column, String asc_or_desc)
+    {
+        ArrayList<Student> list = new ArrayList<>();
+        Connection connection = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try
+        {
+            //加载驱动,获得链接
+            connection = getConnection();
+            //创建一个Statement对象
+            statement = connection.createStatement();
+            String sql = "select * from information order by " + column + " " + asc_or_desc;
+            //执行sql语句，返回结果集
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next())
+            {
+                Integer no = resultSet.getInt("no");
+                String name = resultSet.getString("name");
+                String sex = resultSet.getString("sex");
+                Integer age = resultSet.getInt("age");
+                Student student = new Student(no, name, sex, age);
+                list.add(student);
+            }
+        }
+        catch (SQLException e)                   //数据库异常
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.err.println("异常！异常内容为：" + e.getMessage());
+            //调试使用：
+            //e.printStackTrace();
+        }
+        catch (Exception e)                     //其它异常
+        {
+            e.printStackTrace();
+        }
+        finally                                 //关闭
+        {
+            if (resultSet != null)
+            {
+                try
+                {
+                    resultSet.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (statement != null)
+            {
+                try
+                {
+                    statement.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null)
+            {
+                try
+                {
+                    connection.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return list;
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\Function_interface.java
+import java.util.ArrayList;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Interface(接口名): Function_interface
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 13:52
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public interface Function_interface
+{
+    //查询所有学生
+    public ArrayList<Student> find();
+
+    //按学生id查找学生
+    public Student findById(Integer no);
+
+    //添加学生
+    public int insert(Student student);
+
+    //修改学生信息
+    public int update(Student student);
+
+    //修改学生信息，包括学号
+    public int update(Student student, int old_no);
+
+    //删除学生信息
+    public int delete(Integer no);
+
+    //排序
+    public ArrayList<Student> sort(String column, String asc_or_desc);
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\insert_test.java
+import java.awt.*;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): insert_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:29
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class insert_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        Function function = new Function();
+        Student student = new Student(13, "杨某人", "男", 20);
+        int result = function.insert(student);
+        if (result == 0)
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.out.println("插入失败！");
+        }
+        else
+        {
+            System.out.println("插入成功");
+        }
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime);
+             final_runtime = final_runtime / 1000;
+             System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+         }
+        else
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime) / 10000;
+             final_runtime = final_runtime / 100000;
+             System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\select_test.java
+import java.util.ArrayList;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): select_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:21
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class select_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        Function function = new Function();
+        ArrayList<Student> list = function.find();
+
+        for (Student student : list)
+        {
+            System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+        }
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime);
+             final_runtime = final_runtime / 1000;
+             System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+         }
+        else
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime) / 10000;
+             final_runtime = final_runtime / 100000;
+             System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\sort_test.java
+import java.util.ArrayList;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): sort_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:37
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class sort_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("no", "desc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("name", "asc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("name", "desc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("sex", "asc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("sex", "desc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("age", "asc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+
+        System.out.println();
+        System.out.println();
+        {
+            Function function = new Function();
+            ArrayList<Student> list = function.sort("age", "desc");
+
+            for (Student student : list)
+            {
+                System.out.println(student.getNo() + "\t\t" + student.getName() + "\t\t" + student.getSex() + "\t\t" + student.getAge());
+            }
+        }
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime);
+             final_runtime = final_runtime / 1000;
+             System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+         }
+        else
+        {
+             double final_runtime;
+             final_runtime = (endTime - startTime) / 10000;
+             final_runtime = final_runtime / 100000;
+             System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\Student.java
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): Student
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 13:50
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class Student
+{
+    private Integer no;
+    private String name;
+    private String sex;
+    private Integer age;
+
+    public Student()
+    {
+
+    }
+
+    public Student(Integer no, String name, String sex, Integer age)
+    {
+        this.no = no;
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+    }
+
+    public Integer getNo()
+    {
+        return no;
+    }
+
+    public void setNo(Integer no)
+    {
+        this.no = no;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getSex()
+    {
+        return sex;
+    }
+
+    public void setSex(String sex)
+    {
+        this.sex = sex;
+    }
+
+    public Integer getAge()
+    {
+        return age;
+    }
+
+    public void setAge(Integer age)
+    {
+        this.age = age;
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public String toString()
+    {
+        final StringBuilder stringbuilder = new StringBuilder();
+        stringbuilder.append("no：").append(no).append('\t');
+        stringbuilder.append("name：").append(name).append('\t');
+        stringbuilder.append("sex：").append(sex).append('\t');
+        stringbuilder.append("age：").append(age).append('\n');
+        return stringbuilder.toString();
+    }
+}
+�
+H:\����\��������\JDBCʵ�����ݿ����ɾ�Ĳ�\\src\\main\\java\\update_test.java
+import java.awt.*;
+
+/**
+ * Project name(项目名称)：JDBC实现数据库的增删改查
+ * Package(包名): PACKAGE_NAME
+ * Class(类名): update_test
+ * Author(作者）: mao
+ * Author QQ：1296193245
+ * GitHub：https://github.com/maomao124/
+ * Date(创建日期)： 2022/1/14
+ * Time(创建时间)： 14:32
+ * Version(版本): 1.0
+ * Description(描述)： 无
+ */
+
+public class update_test
+{
+    public static void main(String[] args)
+    {
+        //------------------------------------------------------
+        long startTime = System.nanoTime();   //获取开始时间
+        //------------------------------------------------------
+        Function function = new Function();
+        Student student = function.findById(13);
+        student.setName("杨某");
+        int result = function.update(student);
+        if (result == 0)
+        {
+            Toolkit.getDefaultToolkit().beep();
+            System.out.println("更新失败！");
+        }
+        else
+        {
+            System.out.println("更新成功");
+        }
+        System.out.println();
+        //------------------------------------------------------
+        long endTime = System.nanoTime(); //获取结束时间
+        if ((endTime - startTime) < 1000000)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime);
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "微秒");
+        }
+        else if ((endTime - startTime) >= 1000000 && (endTime - startTime) < 10000000000L)
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 1000;
+            final_runtime = final_runtime / 1000;
+            System.out.println("算法运行时间： " + final_runtime + "毫秒");
+        }
+        else
+        {
+            double final_runtime;
+            final_runtime = (endTime - startTime) / 10000;
+            final_runtime = final_runtime / 100000;
+            System.out.println("算法运行时间： " + final_runtime + "秒");
+        }
+        Runtime r = Runtime.getRuntime();
+        float memory;
+        memory = r.totalMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("JVM总内存：%.3fMB\n", memory);
+        memory = r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf(" 空闲内存：%.3fMB\n", memory);
+        memory = r.totalMemory() - r.freeMemory();
+        memory = memory / 1024 / 1024;
+        System.out.printf("已使用的内存：%.4fMB\n", memory);
+        //------------------------------------------------------
+    }
+}
+�
